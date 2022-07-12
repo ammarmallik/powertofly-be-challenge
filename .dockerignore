@@ -1,0 +1,8 @@
+.env
+.git
+.idea
+__pycache__
+.gitignore
+Makefile
+README.md
+deploy.sh
