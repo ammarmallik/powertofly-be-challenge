@@ -23,8 +23,10 @@ class BaseConfig:
     POSTGRES_PORT = os.environ.get('POSTGRES_PORT', 5432)
     POSTGRES_USER = os.environ.get('POSTGRES_USER', 'powertofly')
     POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', 'powertofly')
-    SQLALCHEMY_DATABASE_URI = (f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/'
-                               f'{POSTGRES_DB}')
+    DB_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', DB_URL)
+    if not SQLALCHEMY_DATABASE_URI.startswith('postgresql://'):
+        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace('postgres://', 'postgresql://')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

@@ -24,3 +24,12 @@ DB = SQLAlchemy(APP)
 
 # Import all versions
 import api.v1
+
+
+@APP.route('/', methods=['GET'])
+def health():
+    """
+    Check server health.
+    :return: OK. (string)
+    """
+    return 'OK'
