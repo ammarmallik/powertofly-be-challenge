@@ -5,7 +5,7 @@
 #                                                                           #
 #############################################################################
 """
-This file contains constants.
+This file contains constants for the application.
 
 @last_modified: July 09, 2022
 

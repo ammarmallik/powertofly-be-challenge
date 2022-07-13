@@ -11,10 +11,6 @@ Package: `api.v1`
 
 @author: Ammar Akbar
 """
-from api import APP
-from api.v1.user import views
-from api.v1.user import models
+from api.v1.user import models, views
 
 PREFIX = '/v1'
-
-APP.register_blueprint(views.BP_USER, url_prefix=PREFIX)

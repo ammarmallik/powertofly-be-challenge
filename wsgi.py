@@ -5,7 +5,7 @@
 #                                                                           #
 #############################################################################
 """
-This file is the web server gateway interface.
+This file is the web server gateway interface for Flask App.
 
 @last_modified: July 09, 2022
 
@@ -14,10 +14,6 @@ This file is the web server gateway interface.
 import os
 
 from api import APP
-from api.manage import cli
-
 
 if __name__ == '__main__':
-    cli()
-    port = int(os.environ.get('PORT', 5000))
-    APP.run(host='0.0.0.0', port=port)
+    APP.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
