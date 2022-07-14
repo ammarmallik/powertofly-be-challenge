@@ -49,3 +49,9 @@ COUNTRIES = ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Sam
              'United States', 'United States Minor Outlying Islands', 'Uruguay', 'Uzbekistan', 'Vanuatu',
              'Venezuela, Bolivarian Republic of', 'Viet Nam', 'Virgin Islands, British', 'Virgin Islands, U.S.',
              'Wallis and Futuna', 'Yemen', 'Zambia', 'Zimbabwe']
+
+# Pagination constants
+ROWS_PER_PAGE = 50
+MAX_PER_PAGE = 500
+ERROR_OUT = False
+RETURN_FORMATS = ('json', 'html')

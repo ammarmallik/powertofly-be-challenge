@@ -15,7 +15,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 from api.utils import set_config
-from api.utils.jsonencoder import JSONEncoder
 
 DB = SQLAlchemy()
 
@@ -23,14 +22,22 @@ DB = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     set_config(app)
-    app.json_encoder = JSONEncoder
     DB.init_app(app)
 
     with app.app_context():
         from api import commands, v1
+        from api.utils import errorhandler as e
 
+        # Register blueprints
         app.register_blueprint(commands.CLI)
         app.register_blueprint(v1.views.BP_USER, url_prefix=v1.PREFIX)
+
+        # Register error handlers
+        app.register_error_handler(400, e.bad_request)
+        app.register_error_handler(404, e.resource_not_found)
+        app.register_error_handler(405, e.method_not_allowed)
+        app.register_error_handler(429, e.too_many_requests)
+        app.register_error_handler(500, e.internal_server_error)
         return app
 
 

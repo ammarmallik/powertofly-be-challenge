@@ -29,9 +29,8 @@ def initialize():
 @CLI.cli.command('seed_db')
 def insert_user_data():
     countries_len = len(COUNTRIES)
-    query = (f"INSERT INTO USERS (Email, Name, Age, Country) SELECT 'user_' || num || '@powertofly.com', "
-             f"'User ' || num, FLOOR(RANDOM() * (90-10+1) + 10)::int, "
-             f"(ARRAY{COUNTRIES})[floor(random()*{countries_len})+1] "
-             f"from generate_series(1, 10000) as num;")
+    query = (f"INSERT INTO USERS (Email, Name, Country) SELECT 'user_' || num || '@powertofly.com', "
+             f"'User ' || num, (ARRAY{COUNTRIES})[floor(random()*{countries_len})+1] "
+             f"from generate_series(1, 1000000) as num;")
     DB.session.execute(query)
     DB.session.commit()

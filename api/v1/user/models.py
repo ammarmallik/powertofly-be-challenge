@@ -18,16 +18,19 @@ class User(DB.Model):
     __tablename__ = 'users'
 
     id = DB.Column(DB.Integer, primary_key=True)
-    name = DB.Column(DB.String(64), unique=True, index=True, nullable=False)
-    email = DB.Column(DB.String(64), unique=True, index=True, nullable=False)
-    age = DB.Column(DB.Integer, nullable=False, default=18)
-    country = DB.Column(DB.String(64), nullable=False, default='Pakistan')
+    name = DB.Column(DB.String(64), nullable=False, default='Powertofly')
+    email = DB.Column(DB.String(64), nullable=False, unique=True, index=True)
+    country = DB.Column(DB.String(64), nullable=False, index=True, default='Pakistan')
     created_at = DB.Column(DB.DateTime, nullable=False, server_default=DB.func.now())
 
-    def __init__(self, name, email):
+    def __init__(self, name, email, country):
         self.name = name
         self.email = email
+        self.country = country
 
     def __json__(self):
-        return {'name': self.name, 'email': self.email, 'age': self.age, 'country': self.country,
+        return {'id': self.id,
+                'name': self.name,
+                'email': self.email,
+                'country': self.country,
                 'created_at': self.created_at}

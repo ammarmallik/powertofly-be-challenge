@@ -27,4 +27,5 @@ def set_config(app):
     if flask_env not in ['development', 'stage', 'production']:
         flask_env = 'development'
     app.config.from_object(config_map[flask_env])
+    app.config['JSON_SORT_KEYS'] = False
     return flask_env
