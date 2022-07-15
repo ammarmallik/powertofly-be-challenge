@@ -46,6 +46,7 @@ def get_users(**kwargs):
         users = users.filter(User.email.ilike(search) | User.country.ilike(search))
     users = users.order_by(User.id.asc()).paginate(page=page,
                                                    per_page=per_page,
+                                                   error_out=c.ERROR_OUT,
                                                    max_per_page=c.MAX_PER_PAGE)
     if return_format == 'html' and not CACHE.has(key):
         resp = render_template('powertofly.html', users=users, curr_page=page, per_page=per_page, filter=q_filter)
