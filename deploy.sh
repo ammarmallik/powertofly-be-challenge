@@ -9,12 +9,17 @@
 #                                                                           #
 # Deploy the containerized Flask API on Heroku.                             #
 #############################################################################
-if [ $# -eq 0 ]; then
-    echo 'Please pass the repository name on hub.docker.com.'
+if [ -z "$1" ]; then
+    echo 'Please provide the username on hub.docker.com.'
     exit 90
 fi
 
-if [ "$2" != "development" ] && [ "$2" != "production" ]; then
+if [ -z "$2" ]; then
+    echo 'Please provide the repository name on hub.docker.com.'
+    exit 90
+fi
+
+if [ "$3" != "development" ] && [ "$3" != "production" ]; then
 	echo "Invalid environment. Choose between development|production."
 	exit 91
 fi
@@ -24,7 +29,8 @@ directory=$(dirname "$0")
 pushd "$directory" &> /dev/null || exit 80
 
 IMAGE_NAME="powertofly-be-challenge_flask"
-REPO_NAME=$1
+REPO_USER=$1
+REPO_NAME=$2
 
 echo "===============================Docker-Compose Build & Run=================================="
 make build_and_run yml=docker-compose.yml || exit 2
@@ -33,10 +39,10 @@ echo "===============================Docker CLI Login===========================
 docker login || exit 3
 
 echo "===============================Tag Latest Build=================================="
-docker tag $IMAGE_NAME:latest ammarmallik/$REPO_NAME:latest || exit 4
+docker tag $IMAGE_NAME:latest $REPO_USER/$REPO_NAME:latest || exit 4
 
 echo "===============================Push Build to hub.docker.com=================================="
-docker push ammarmallik/$REPO_NAME:latest || exit 5
+docker push $REPO_USER/$REPO_NAME:latest || exit 5
 
 echo "===============================Login Heroku=================================="
 heroku login || exit 6
@@ -48,7 +54,7 @@ echo "===============================Push Docker Image to Heroku================
 heroku container:push web || exit 8
 
 echo "===============================Set Environment Variables=================================="
-if [ "$2" == "production" ];then
+if [ "$3" == "production" ];then
     xargs -a ./.env/.env.prod -I {} heroku config:set {}
 else
     xargs -a ./.env/.env -I {} heroku config:set {}
