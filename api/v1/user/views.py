@@ -13,6 +13,7 @@ This file contains views related to `user` module.
 """
 from flask import Blueprint, jsonify, render_template
 
+from api import CACHE
 from api.utils import constants as c
 from api.v1.user.decorators import parse_request_params
 from api.v1.user.models import User
@@ -36,6 +37,9 @@ def get_users(**kwargs):
     per_page = kwargs['per_page']
     return_format = kwargs['format']
     q_filter = kwargs['filter']
+    key = f'{page}-{per_page}-{q_filter}-{return_format}'
+    if CACHE.has(key):
+        return CACHE.get(key)
     users = User.query
     if q_filter:
         search = f'%{q_filter}%'
@@ -43,12 +47,16 @@ def get_users(**kwargs):
     users = users.order_by(User.id.asc()).paginate(page=page,
                                                    per_page=per_page,
                                                    max_per_page=c.MAX_PER_PAGE)
-    if return_format == 'html':
-        return render_template('powertofly.html', users=users, curr_page=page, per_page=per_page, filter=q_filter)
-    return jsonify({
-        'curr_page': page,
-        'prev_page': users.prev_num if users.has_prev else None,
-        'next_page': users.next_num if users.has_next else None,
-        'total_pages': users.pages,
-        'data': [user.__json__() for user in users.items]
-    })
+    if return_format == 'html' and not CACHE.has(key):
+        resp = render_template('powertofly.html', users=users, curr_page=page, per_page=per_page, filter=q_filter)
+        CACHE.set(key, resp)
+    elif return_format == 'json' and not CACHE.has(key):
+        resp = jsonify({
+            'curr_page': page,
+            'prev_page': users.prev_num if users.has_prev else None,
+            'next_page': users.next_num if users.has_next else None,
+            'total_pages': users.pages,
+            'data': [user.__json__() for user in users.items]
+        })
+        CACHE.set(key, resp)
+    return CACHE.get(key)

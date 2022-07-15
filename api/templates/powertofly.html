@@ -69,17 +69,17 @@ HTML template for showing the user data for Powertofly.                     -
           <nav aria-label="Page navigation users">
             <ul class="pagination">
               {% if users.has_prev %}
-              <li class="page-item"><a class="page-link" href="{{ url_for('user.get_users', page=users.prev_num, per_page=per_page, format='html') }}">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('user.get_users', filter=filter, page=users.prev_num, per_page=per_page, format='html') }}">Previous</a></li>
               {% else %}
               <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
               {% endif %} {% for page in users.iter_pages(left_edge=3, right_edge=3) %} {% if page %} {% if page==users.page %}
-              <li class="page-item active"><a class="page-link" href="{{ url_for('user.get_users', page=page, per_page=per_page, format='html') }}">{{ page }}</a></li>
+              <li class="page-item active"><a class="page-link" href="{{ url_for('user.get_users', filter=filter, page=page, per_page=per_page, format='html') }}">{{ page }}</a></li>
               {% else %}
-              <li class="page-item"><a class="page-link" href="{{ url_for('user.get_users', page=page, per_page=per_page, format='html') }}">{{ page }}</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('user.get_users', filter=filter, page=page, per_page=per_page, format='html') }}">{{ page }}</a></li>
               {% endif %} {% else %}
               <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
               {% endif %} {% endfor %} {% if users.has_next %}
-              <li class="page-item"><a class="page-link" href="{{ url_for('user.get_users', page=users.next_num, per_page=per_page, format='html') }}">Next</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('user.get_users', filter=filter, page=users.next_num, per_page=per_page, format='html') }}">Next</a></li>
               {% else %}
               <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
               {% endif %}

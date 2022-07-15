@@ -18,7 +18,7 @@ def set_config(app):
     """
     Set configuration using the FLASK_ENV environment.
     :param app: Flask App object. (object)
-    :return: Flask environment. (str)
+    :return: None. (none)
     """
     flask_env = os.environ.get('FLASK_ENV')
     config_map = {'development': 'api.config.DevConfig',
@@ -28,4 +28,6 @@ def set_config(app):
         flask_env = 'development'
     app.config.from_object(config_map[flask_env])
     app.config['JSON_SORT_KEYS'] = False
-    return flask_env
+    app.config['CACHE_TYPE'] = 'SimpleCache'
+    app.config['CACHE_DEFAULT_TIMEOUT'] = 300
+    return None
